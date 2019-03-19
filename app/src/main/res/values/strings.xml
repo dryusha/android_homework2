@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">homework2</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="age">Age</string>
+    <string name="preferred_day_of_the_week">Preferred day of the week</string>
+    <string name="monday">Monday</string>
+    <string name="friday">Friday</string>
+    <string name="sunday">Sunday</string>
+    <string name="agree_with_terms_and_conditions">Agree with Terms And Conditions</string>
+    <string name="submit">Submit</string>
+    <string name="header_name">Header Name</string>
+    <string name="x">X</string>
+    <string name="left_arrow"><![CDATA[<]]></string>
+</resources>

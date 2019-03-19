@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#000">
+
+    <Button
+        android:id="@+id/navigation_back_btn"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:background="@color/background_btn"
+        android:text="@string/left_arrow"
+    />
+    <TextView
+        android:id="@+id/navigation_text"
+        android:layout_toRightOf="@+id/navigation_back_btn"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/header_name"
+        android:layout_centerInParent="true"
+        android:background="@color/background_grey"
+        />
+    <Button
+        android:id="@+id/aaa"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:background="@color/background_btn"
+        android:text="@string/x"
+        />
+
+
+
+</RelativeLayout>
