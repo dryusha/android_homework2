@@ -1,10 +1,14 @@
 package com.example.homework3;
 
-public class CarsObject {
-    String className;
+import android.graphics.drawable.Drawable;
 
-    public CarsObject(String className){
-        this.className = className;
+public class CarsObject {
+    String carClassName;
+    Drawable carImg;
+
+    public CarsObject(String carClassName, Drawable carImg){
+        this.carClassName = carClassName;
+        this.carImg = carImg;
     }
 
 }

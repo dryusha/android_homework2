@@ -1,6 +1,8 @@
 package com.example.homework3;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,28 +14,30 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
 
-        final CarsObject[] carsObjects = {
-            new CarsObject("convertible"),
-            new CarsObject("coupe"),
-            new CarsObject("crossover"),
-            new CarsObject("sedan"),
-            new CarsObject("truck"),
-            new CarsObject("van"),
-            new CarsObject("wagon")
-        };
+        Resources res = getResources();
+        final String[] carsNameArray = res.getStringArray(R.array.car_classes);
+        final ArrayList<CarsObject> carsObjects = new ArrayList<>();
+        for (int i = 0; i < carsNameArray.length; i++) {
+            String carName = carsNameArray[i];
+            int resourceId =  this.getResources().getIdentifier(carName.toLowerCase(), "drawable", getPackageName());
+            Drawable carImage = getResources().getDrawable(resourceId);
+            CarsObject newCar = new CarsObject(carName, carImage);
+            carsObjects.add(newCar);
+        }
 
         ArrayAdapter<CarsObject> adapter = new ArrayAdapter<CarsObject>(this, 0, carsObjects) {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-                CarsObject car = carsObjects[position];
+                CarsObject car = carsObjects.get(position);
                 if(convertView == null){
                     convertView = getLayoutInflater().inflate(R.layout.car_list, null, false);
                 }
@@ -47,9 +51,8 @@ public class MainActivity extends AppCompatActivity {
                     convertView.setTag(viewHolder);
                 }
 
-                int carImgId = getResources().getIdentifier(car.className, "drawable", getPackageName());
-                viewHolder.imageViewCar.setImageResource(carImgId);
-                viewHolder.textViewClassNameCar.setText(car.className);
+                viewHolder.imageViewCar.setImageDrawable(car.carImg);
+                viewHolder.textViewClassNameCar.setText(car.carClassName);
 
 
                 return convertView;
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 CharSequence text =
                         "Clicked position is: " + String.valueOf(position) +
                         "\n" +
-                        "Class name is: " + carsObjects[position].className;
+                        "Class name is: " + carsObjects.get(position).carClassName;
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
