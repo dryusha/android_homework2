@@ -18,4 +18,4 @@ public class GoogleMap extends Activity {
         TextView textView = findViewById(R.id.textViewGoogleMap);
         textView.setText(value);
     }
-}å
+}
