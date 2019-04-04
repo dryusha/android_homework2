@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
 
                         JsonElement mJson = parser.parse(imgObject.toString());
                         //TODO 3 uisng GSON parse mJson to PhotoItem object
-                        PhotoItem photoItem = gson.fromJson(mJson.toString(), PhotoItem.class);
+                        PhotoItem photoItem = gson.fromJson(mJson, PhotoItem.class);
                         photoItems.add(photoItem);
 
                     }
@@ -98,9 +98,10 @@ public class MainActivity extends Activity {
                                     .inflate(R.layout.custom_item_img, null, false);
                         }
 
-                        ViewHolder viewHolder = new ViewHolder(convertView);
+                        ViewHolder viewHolder;
                         if(convertView.getTag() == null) {
                             // TODO 4 Map ViewHolder elements via Butterknife
+                            viewHolder = new ViewHolder(convertView);
                             convertView.setTag(viewHolder);
                         } else  {
                             viewHolder = (ViewHolder)convertView.getTag();
