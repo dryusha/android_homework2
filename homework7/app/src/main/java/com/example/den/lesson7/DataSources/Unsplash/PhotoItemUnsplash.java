@@ -7,6 +7,7 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Table;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Table
 public class PhotoItemUnsplash implements PhotoItem {
@@ -27,7 +28,6 @@ public class PhotoItemUnsplash implements PhotoItem {
 
     private String URLsFromORM;
     private String UserFromORM;
-    private String DeletedFromORM;
 
     public PhotoItemUnsplash() {}
 
@@ -55,18 +55,15 @@ public class PhotoItemUnsplash implements PhotoItem {
 
     @Override
     public void saveToDatabase() {
+        if(isSavedRecordExist()) { // if exist -> update
+            update(false);
+        } else {
+            // before save - convert inner objects to string
+            this.URLsFromORM = urls.toString();
+            this.UserFromORM = user.toString();
 
-        if(SugarRecord.find(PhotoItemUnsplash.class,"img_ID = ? AND Deleted_From_ORM = ?", this.imgID, "true").size() > 0) {
-            SugarRecord.find(PhotoItemUnsplash.class,"img_ID = ? ", this.imgID);
-            this.isDeleted = false;
+            SugarRecord.save(this);
         }
-
-        // before save - convert inner objects to string
-        this.URLsFromORM = urls.toString();
-        this.UserFromORM = user.toString();
-        this.DeletedFromORM = Boolean.toString(this.isDeleted);
-
-        SugarRecord.save(this);
     }
 
     @Override
@@ -77,19 +74,31 @@ public class PhotoItemUnsplash implements PhotoItem {
 
     @Override
     public void deleteFromDatabaseSafe() {
-        this.isDeleted = true;
-        SugarRecord.findById(PhotoItemUnsplash.class, 1);
-        this.DeletedFromORM = "true";
-
-        SugarRecord.save(this);
-
+        update(true);
     }
 
     @Override
     public boolean isSavedToDatabase() {
-        // A small query is needed because of conflicted id properties
-        //return SugarRecord.find(PhotoItemUnsplash.class,"img_ID = ?", this.imgID).size() > 0;
-        return SugarRecord.find(PhotoItemUnsplash.class,"img_ID = ? AND Deleted_From_ORM = ?", this.imgID, Boolean.toString(this.isDeleted)).size() > 0;
+        PhotoItemUnsplash item = getSavedRecord();
+        if (item == null) {
+            return false; // if no record exist -> not saved
+        }
+        return !item.isDeleted; // if record exist -> return its value
+    }
+
+    private void update(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+        SugarRecord.executeQuery("UPDATE PHOTO_ITEM_UNSPLASH SET IS_DELETED = ? WHERE img_ID = ?", this.isDeleted ? "1" : "0", this.imgID);
+    }
+
+    private boolean isSavedRecordExist() {
+        return getSavedRecord() != null;
+    }
+
+    private PhotoItemUnsplash getSavedRecord() {
+        List<PhotoItemUnsplash> items = SugarRecord.find(PhotoItemUnsplash.class,"img_ID = ?", this.imgID);
+        if(items.isEmpty()) { return null; } // If empty -> nothing to return
+        return items.get(0);
     }
 
     public class User implements Serializable {
